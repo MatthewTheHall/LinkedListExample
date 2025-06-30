@@ -4,22 +4,21 @@ using namespace std;
 
 class ContactNode {
 public:
-	/* Declare member functions here */
 	ContactNode(const string& name, const string& phone, ContactNode* next = nullptr);
 	const string& GetName() const { return contactName; }
 	const string& GetPhoneNumber() const { return contactPhoneNumber; }
 	ContactNode* GetNext() const { return nextNodePtr; } 
-	void InsertAfter(ContactNode* nodeLoc); 
+	void InsertAfter(ContactNode* nodeLoc); //insert nodeLoc immediately after *this*
 	void PrintContactNode() const;
 
 private:
-	/* Declare data members here */
 	string contactName;
 	string contactPhoneNumber;
 	ContactNode* nextNodePtr;
 };
 
-/* Define member functions here */
+
+//constructor initializer 
 ContactNode::ContactNode(const string& name, const string& phone, ContactNode* next)
 {
 	this->contactName = name; //sets passed info
@@ -28,8 +27,8 @@ ContactNode::ContactNode(const string& name, const string& phone, ContactNode* n
 }
 void ContactNode::InsertAfter(ContactNode* nodeLoc)
 {
-	nodeLoc->nextNodePtr = nextNodePtr; //set sub object ptr to next
-	nextNodePtr = nodeLoc; //update next
+	nodeLoc->nextNodePtr = nextNodePtr; //new node points where *this used to
+	nextNodePtr = nodeLoc; //*this now points to new node
 }
 void ContactNode::PrintContactNode() const //prints both data for the current node
 {
@@ -38,9 +37,8 @@ void ContactNode::PrintContactNode() const //prints both data for the current no
 }
 
 int main() {
-	/* Type your code here. */
-	ContactNode* head = nullptr; //first node
-	ContactNode* last = nullptr; //last node
+	ContactNode* head = nullptr; //first node in list (null while empty)
+	ContactNode* last = nullptr; //last node/tail pointer for appending
 	string name, phone;
 	for (int i = 1; i <= 3; ++i) //input loop
 	{
@@ -48,15 +46,13 @@ int main() {
 		getline(cin, phone);
 		cout << "Person " << i << ": " << name << ", " << phone << '\n';
 		ContactNode* node = new ContactNode(name, phone);
-		if (!head) //if not first node
+		if (!head) //if list is still empty
 		{
-			head = last = node; //? head = last = the new node input
-		} else //if head? so first append
+			head = last = node; //head and last both point to node
+		} else //list has at least one node
 		{
-			last->InsertAfter(node); //inserting node into last
-			//this will update node sub object with nextNodePtr address
-			//then update nextNodePtr with node's info?
-			last = node;
+			last->InsertAfter(node); //stitch new node after last
+			last = node; //update last pointer/tail
 		}
 	}
 	cout << "\nCONTACT LIST\n"; //output loop
